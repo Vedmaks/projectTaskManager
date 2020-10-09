@@ -1,0 +1,12 @@
+PATH="$PATH:$GOPATH/bin"’ >> .base_profile
+
+
+
+
+
+
+
+dfs
+echo PATH=/mingw64/bin:/usr/bin:/c/Users/USER/bin:/c/Go/bin:/c/RBS_EC_V3_www/MySql/MySql Server 4.1/bin:/c/Program Files (x86)/Intel/iCLS Client:/c/Program Files/Intel/iCLS Client:/c/Windows/system32:/c/Windows:/c/Windows/System32/Wbem:/c/Windows/System32/WindowsPowerShell/v1.0:/c/Program Files/Intel/Intel(R) Management Engine Components/DAL:/c/Program Files/Intel/Intel(R) Management Engine Components/IPT:/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/DAL:/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/IPT:/d/soft/nodejs:/c/Users/USER/Go/bin:/c/RBS_EC_V3_www/php:/c/Program Files (x86)/Common Files/RainbowSoft/LibraryV3:/c/Go/bin:/cmd:/d/soft/_PROGRAMMING/Microsoft VS Code/bin:/d/soft/Go/bin:/c/Users/USER/AppData/Roaming/npm:/c/Users/USER/AppData/Local/GitHubDesktop/bin:$GOPATH/bin:/d/soft/postgres/bin:/c/Users/USER/AppData/Local/Programs/Microsoft VS Code/bin:/c/Users/USER/go:C:\Users\USER\go/bin:C:\Users\USER\go/bin:C:\Users\USER\go/bin:C:\Users\USER\go/bin’
+PATH="$PATH:$GOPATH/bin"’ >> .base_profile
+echo PATH=/mingw64/bin:/usr/bin:/c/Users/USER/bin:/c/Go/bin:/c/RBS_EC_V3_www/MySql/MySql Server 4.1/bin:/c/Program Files (x86)/Intel/iCLS Client:/c/Program Files/Intel/iCLS Client:/c/Windows/system32:/c/Windows:/c/Windows/System32/Wbem:/c/Windows/System32/WindowsPowerShell/v1.0:/c/Program Files/Intel/Intel(R) Management Engine Components/DAL:/c/Program Files/Intel/Intel(R) Management Engine Components/IPT:/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/DAL:/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/IPT:/d/soft/nodejs:/c/Users/USER/Go/bin:/c/RBS_EC_V3_www/php:/c/Program Files (x86)/Common Files/RainbowSoft/LibraryV3:/c/Go/bin:/cmd:/d/soft/_PROGRAMMING/Microsoft VS Code/bin:/d/soft/Go/bin:/c/Users/USER/AppData/Roaming/npm:/c/Users/USER/AppData/Local/GitHubDesktop/bin:$GOPATH/bin:/d/soft/postgres/bin:/c/Users/USER/AppData/Local/Programs/Microsoft VS Code/bin:/c/Users/USER/go:C:\Users\USER\go/bin:C:\Users\USER\go/bin:C:\Users\USER\go/bin:C:\Users\USER\go/bin’
