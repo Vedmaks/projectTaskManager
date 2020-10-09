@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"projectTaskManager/app/models/providers/projectprovider"
+	"projectTaskManager/app/models/providers/project_provider"
 
 	"github.com/revel/revel"
 )
@@ -9,7 +9,7 @@ import (
 // CProject ds
 type CProject struct {
 	*revel.Controller
-	provider *projectprovider.PProject
+	provider *project_provider.PProject
 }
 
 // Before интерцептор контроллера CProject
@@ -17,27 +17,27 @@ func (c *CProject) Before() (result revel.Result, rc CProject) {
 	return
 }
 
-// GetProjectByID получение книги по id
+// GetProjectByID получение проекта по id
 func (c *CProject) GetProjectByID() revel.Result {
 	return nil
 }
 
-// GetProjects получение всех книг
+// GetProjects получение всех проектов
 func (c *CProject) GetProjects() revel.Result {
 	return nil
 }
 
-// CreateProject создание книги
+// CreateProject создание проекта
 func (c *CProject) CreateProject() revel.Result {
 	return nil
 }
 
-// UpdateProject изменение книги
+// UpdateProject изменение проекта
 func (c *CProject) UpdateProject() revel.Result {
 	return nil
 }
 
-// DeleteProject удаление книги
+// DeleteProject удаление проекта
 func (c *CProject) DeleteProject() revel.Result {
 	return nil
 }

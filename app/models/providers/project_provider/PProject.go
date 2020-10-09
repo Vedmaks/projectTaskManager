@@ -1,11 +1,11 @@
-package projectprovider
+package project_provider
 
 import (
 	"projectTaskManager/app/models/entities"
 	"projectTaskManager/app/models/mappers"
 )
 
-// PProject провайдер контроллера книг
+// PProject провайдер контроллера проектов
 type PProject struct {
 	projectMapper *mappers.MProject
 }
