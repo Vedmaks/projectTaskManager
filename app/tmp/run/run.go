@@ -115,15 +115,55 @@ func Register() {
 			
 		})
 	
-	revel.RegisterController((*controllers1.App)(nil),
+	revel.RegisterController((*controllers1.CIndex)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					12: []string{ 
+					14: []string{ 
 					},
+				},
+			},
+			
+		})
+	
+	revel.RegisterController((*controllers1.CProject)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "GetProjectByID",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "GetProjects",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "CreateProject",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "UpdateProject",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "DeleteProject",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
 				},
 			},
 			

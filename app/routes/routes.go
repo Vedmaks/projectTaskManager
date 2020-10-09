@@ -98,15 +98,55 @@ func (_ tTestRunner) List(
 }
 
 
-type tApp struct {}
-var App tApp
+type tCIndex struct {}
+var CIndex tCIndex
 
 
-func (_ tApp) Index(
+func (_ tCIndex) Index(
 		) string {
 	args := make(map[string]string)
 	
-	return revel.MainRouter.Reverse("App.Index", args).URL
+	return revel.MainRouter.Reverse("CIndex.Index", args).URL
+}
+
+
+type tCProject struct {}
+var CProject tCProject
+
+
+func (_ tCProject) GetProjectByID(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CProject.GetProjectByID", args).URL
+}
+
+func (_ tCProject) GetProjects(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CProject.GetProjects", args).URL
+}
+
+func (_ tCProject) CreateProject(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CProject.CreateProject", args).URL
+}
+
+func (_ tCProject) UpdateProject(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CProject.UpdateProject", args).URL
+}
+
+func (_ tCProject) DeleteProject(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CProject.DeleteProject", args).URL
 }
 
 
