@@ -115,9 +115,11 @@ var CProject tCProject
 
 
 func (_ tCProject) GetProjectByID(
+		id int,
 		) string {
 	args := make(map[string]string)
 	
+	revel.Unbind(args, "id", id)
 	return revel.MainRouter.Reverse("CProject.GetProjectByID", args).URL
 }
 
@@ -143,9 +145,11 @@ func (_ tCProject) UpdateProject(
 }
 
 func (_ tCProject) DeleteProject(
+		id int,
 		) string {
 	args := make(map[string]string)
 	
+	revel.Unbind(args, "id", id)
 	return revel.MainRouter.Reverse("CProject.DeleteProject", args).URL
 }
 

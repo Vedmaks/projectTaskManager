@@ -134,6 +134,7 @@ func Register() {
 			&revel.MethodType{
 				Name: "GetProjectByID",
 				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "id", Type: reflect.TypeOf((*int)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
 				},
@@ -162,6 +163,7 @@ func Register() {
 			&revel.MethodType{
 				Name: "DeleteProject",
 				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "id", Type: reflect.TypeOf((*int)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
 				},

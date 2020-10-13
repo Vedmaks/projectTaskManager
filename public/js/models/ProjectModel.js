@@ -10,53 +10,105 @@ class ProjectModel {
         this.data.set(4, new Project(4, "Проект 4", "Описание проекта 4."));
     }
 
-    getProjects() {
+    async getProjects() {
 
-        return new Promise((resolve, reject) => {
-            let projects = []
+        let response = await fetch(`/project`);
+        let result = await response.json();
 
-            for (let project of this.data.values()) {
-                projects.push(project)
-            }
+        if (result.Err == null) {
 
-            resolve(projects)
+            return new Promise((resolve, reject) => {
+                let projects = []
+    
+                for (let proj of result.Data) {
+
+                    let project = new Project( proj.id, proj.name, proj.desc);
+
+                    projects.push(project)
+                }
+    
+                resolve(projects)
+            })
+
+        } else {
+            webix.message("ОШИБКА");
+            console.log(result);
+        }
+    }
+
+    async getProjectById(id) {
+
+        let response = await fetch(`/project/${id}`);
+
+        let result = await response.json();
+
+        if (result.Err == null) {
+
+            return new Promise((resolve, reject) => {
+            
+                let project = new Project( result.Data.id, result.Data.name, result.Data.desc);
+
+                resolve(project)
+            })
+
+        } else {
+            console.log(response.Err)
+        }
+    }
+
+    async create(project) {
+
+        let response = await fetch('/project', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({
+                name: project.name,
+                desc: project.desc,
+            })
+        });
+        if (response.status == 200) {
+
+            return new Promise((resolve, reject) => {
+                
+                resolve(response.json())
+            })
+
+        } else {
+            return "error"
+        }
+    }
+
+    async update(project) {
+
+        let response = await fetch('/updateproject', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({
+                ID: project.id,
+                Name: project.name,
+                Desc: project.desc,
+            })
+        });
+
+        return await new Promise((resolve, reject) => {
+            
+            resolve(response.json())
         })
     }
 
-    getProjectById(id) {
+    async delete(project) {
 
-        return new Promise((resolve, reject) => {
-            resolve(this.data.get(id))
-        })
+        let response = await fetch(`/project/${project.id}`, {
+                method: 'DELETE',
+            });
 
-    }
-
-    create(project) {
-        return new Promise((resolve, reject) => {
-            let id
-
-            for (let key of this.data.keys()) {
-                id = key
-            }
-            id++
-
-            project.id = id
-            this.data.set(id, project)
-            resolve(this.data.get(project.id))
-        })
-    }
-
-    update(project) {
-        return new Promise((resolve, reject) => {
-            this.data.set(project.id, project)
-            resolve(this.data.get(project.id))
-        })
-    }
-
-    delete(project) {
-        return new Promise((resolve, reject) => {
-            this.data.delete(project.id)
-            resolve()
+        return await new Promise((resolve, reject) => {
+        
+            resolve(response.json())
         })
     }
 }

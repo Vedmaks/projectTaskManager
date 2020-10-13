@@ -9,6 +9,12 @@ module:testrunner
 
 GET     /                                       CIndex.Index
 
+GET     /project                                CProject.getProjects
+GET     /project/:id                            CProject.getProjectByID
+POST    /project                                CProject.createProject
+DELETE  /project/:id                            CProject.deleteProject
+POST    /updateproject                          CProject.updateProject
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
