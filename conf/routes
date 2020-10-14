@@ -15,6 +15,12 @@ POST    /project                                CProject.createProject
 DELETE  /project/:id                            CProject.deleteProject
 POST    /updateproject                          CProject.updateProject
 
+GET     /task                                   CTask.getTasksByProjectID
+POST    /task                                   CTask.createTask
+GET     /task/:id                               CTask.getTaskByID
+DELETE  /task/:id                               CTask.deleteTask
+POST    /updatetask                             CTask.updateTask
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 

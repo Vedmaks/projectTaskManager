@@ -8,7 +8,7 @@ import (
 	"github.com/revel/revel"
 )
 
-// CProject ds
+// CProject контроллер проектов
 type CProject struct {
 	*revel.Controller
 	p project_provider.PProject

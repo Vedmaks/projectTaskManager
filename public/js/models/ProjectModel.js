@@ -2,14 +2,7 @@ import { Project } from "./entities/Project.js"
 
 class ProjectModel {
 
-    constructor() {
-        this.data = new Map();
-        this.data.set(1, new Project(1, "Проект 1", "Описание проекта 1."));
-        this.data.set(2, new Project(2, "Проект 2", "Описание проекта 2."));
-        this.data.set(3, new Project(3, "Проект 3", "Описание проекта 3."));
-        this.data.set(4, new Project(4, "Проект 4", "Описание проекта 4."));
-    }
-
+    // получение всех проектов
     async getProjects() {
 
         let response = await fetch(`/project`);
@@ -36,6 +29,7 @@ class ProjectModel {
         }
     }
 
+    // получение проекта по ID
     async getProjectById(id) {
 
         let response = await fetch(`/project/${id}`);
@@ -56,6 +50,7 @@ class ProjectModel {
         }
     }
 
+    // создание проекта
     async create(project) {
 
         let response = await fetch('/project', {
@@ -80,6 +75,7 @@ class ProjectModel {
         }
     }
 
+    //изменение проекта
     async update(project) {
 
         let response = await fetch('/updateproject', {
@@ -100,6 +96,7 @@ class ProjectModel {
         })
     }
 
+    // удаление проекта
     async delete(project) {
 
         let response = await fetch(`/project/${project.id}`, {

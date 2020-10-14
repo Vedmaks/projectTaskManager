@@ -23,14 +23,11 @@ var (
 // InitDB f
 func InitDB() {
 	connStr := "user=postgres password=12348765 dbname=projectTaskManager sslmode=disable"
-	//connStr := "user=postgres password=12348765 dbname=postgres sslmode=disable"
 	var err error
 	DB, err = sql.Open("postgres", connStr)
 
 	if err != nil {
 		panic(err)
-		//fmt.Println("DB Error", err)
-		//		revel.INFO.Println("DB Error", err)
 	}
 	fmt.Println("DB Connected")
 }

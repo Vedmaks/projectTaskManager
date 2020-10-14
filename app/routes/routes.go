@@ -154,3 +154,47 @@ func (_ tCProject) DeleteProject(
 }
 
 
+type tCTask struct {}
+var CTask tCTask
+
+
+func (_ tCTask) GetTaskByID(
+		id int,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "id", id)
+	return revel.MainRouter.Reverse("CTask.GetTaskByID", args).URL
+}
+
+func (_ tCTask) GetTasksByProjectID(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CTask.GetTasksByProjectID", args).URL
+}
+
+func (_ tCTask) CreateTask(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CTask.CreateTask", args).URL
+}
+
+func (_ tCTask) UpdateTask(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CTask.UpdateTask", args).URL
+}
+
+func (_ tCTask) DeleteTask(
+		id int,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "id", id)
+	return revel.MainRouter.Reverse("CTask.DeleteTask", args).URL
+}
+
+

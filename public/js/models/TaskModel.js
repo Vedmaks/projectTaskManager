@@ -2,108 +2,167 @@ import { Task } from "./entities/Task.js"
 
 class TaskModel {
 
-    constructor() {
-        this.data = new Map();
-        this.data.set(1, new Task(1, "Задача 1", "Описание задачи 1.", "", "В работе", "Очень срочно", "Васильев Василий", "4", "", "1"));
-        this.data.set(2, new Task(2, "Задача 2", "Описание задачи 2.", "", "Согласование", "Срочно", "Петров Петр", "8", "", "2"));
-        this.data.set(3, new Task(3, "Задача 3", "Описание задачи 3.", "", "Завершена", "Не срочно", "Иванов Иван", "54", "101", "3"));
-        this.data.set(4, new Task(4, "Задача 4", "Описание задачи 4.", "", "Согласование", "Срочно", "Петров Петр", "8", "6", "1"));
-        this.data.set(5, new Task(5, "Задача 5", "Описания нет", "", "Бэклог", "", "", "", "", "1"));
-        this.data.set(6, new Task(6, "Задача 6", "Описание задачи 6.", "", "Назначена", "Очень срочно", "Иванов Иван", "", "", "1"));
-        this.data.set(7, new Task(7, "Задача 7", "Описание задачи 7.", "", "Завершена", "Не срочно", "Иванов Иван", "54", "101", "1"));
-    }
+    // Получение всех задач проекта
+    async getTasksByProjectId(projectId, status) {
 
-    getTasksByProjectId(projectId, status) {
+        let response = await fetch(`/task`);
+        let result = await response.json();
 
-        return new Promise((resolve, reject) => {
-            let tasks = []
-            
+        if (result.Err == null) {
 
-            for (let task of this.data.values()) {
+            return new Promise((resolve, reject) => {
+                let tasks = []
+    
+                for (let t of result.Data) {
 
-                if (task.projectId == projectId) {
+                    let task = new Task( t.id, t.name, t.desc, t.notes, t.status, t.importance, t.employee, t.planH, t.factH, t.projectId);
 
-                    if (status == "backlog" && task.status == "Бэклог") {
-                        
-                        tasks.push(task)                        
-                    }
+                    if (task.projectId == projectId) {
 
-                    if (status == "agreement" && task.status == "Согласование") {
-                        
-                        tasks.push(task)            
-                    }
-
-                    if (status == "tasks" && task.status != "Бэклог" && task.status != "Согласование") {
-                        
-                        tasks.push(task)            
+                        if (status == "backlog" && task.status == "Бэклог") {
+                            
+                            tasks.push(task)                        
+                        }
+    
+                        if (status == "agreement" && task.status == "Согласование") {
+                            
+                            tasks.push(task)            
+                        }
+    
+                        if (status == "tasks" && task.status != "Бэклог" && task.status != "Согласование") {
+                            
+                            tasks.push(task)            
+                        }
                     }
                 }
-            }
+    
+                resolve(tasks)
+            })
 
-            resolve(tasks)
-        })
+        } else {
+            webix.message("ОШИБКА");
+            console.log(result);
+        }
     }
 
-    getTaskById(id) {
+    // Получение задачи по ID
+    async getTaskById(id) {
 
-        return new Promise((resolve, reject) => {
-            resolve(this.data.get(Number(id)))
-        })
+        let response = await fetch(`/task/${id}`);
 
+        let t = await response.json();
+
+        if (t.Err == null) {
+
+            return new Promise((resolve, reject) => {
+            
+                let task = new Task( t.Data.id,
+                     t.Data.name, 
+                     t.Data.desc, 
+                     t.Data.notes, 
+                     t.Data.status,
+                     t.Data.importance,
+                     t.Data.employee,
+                     t.Data.planH,
+                     t.Data.factH,
+                     t.Data.projectId);
+
+                resolve(task)
+            })
+
+        } else {
+            console.log(response.Err)
+        }
     }
 
-    create(task) {
-        return new Promise((resolve, reject) => {
-            let id
+    // создание задачи
+    async create(task) {
 
-            for (let key of this.data.keys()) {
-                id = key
-            }
-            id++
+        let response = await fetch('/task', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({
+                name: task.name,
+                desc: task.desc,
+                status: task.status,
+                projectId: currentProjectId
+            })
+        });
+        if (response.status == 200) {
 
-            task.id = id
-            task.projectId = currentProjectId
-            this.data.set(id, task)
-            resolve(this.data.get(task.id))
-        })
+            return new Promise((resolve, reject) => {
+                
+                resolve(response.json())
+            })
+
+        } else {
+            return "error"
+        }
     }
 
-    update(task) {
-        return new Promise((resolve, reject) => {
+    // изменение задачи
+    async update(task) {
 
-            switch (task.status) {
-                case "Бэклог":
-                    task.status = "Новая"
-                break;
-                case "Новая":
-                    task.status = "Назначена"
-                break;
-                case "Назначена":
+        switch (task.status) {
+            case "Бэклог":
+                task.status = "Новая"
+            break;
+            case "Новая":
+                task.status = "Назначена"
+            break;
+            case "Назначена":
+                task.status = "В работе"
+            break;
+            case "В работе":
+                task.status = "Согласование"
+            break;
+            case "Повторно назначена":
+                if(task.factH != "" || task.factH != 0) {
+                    task.planH = ""
+                    task.factH = ""
+                } else {
                     task.status = "В работе"
-                break;
-                case "В работе":
-                    task.status = "Согласование"
-                break;
-                case "Повторно назначена":
-                    if(task.factH != "" || task.factH != 0) {
-                        task.planH = ""
-                        task.factH = ""
-                    } else {
-                        task.status = "В работе"
-                    }
-                    
-                    
-                break;
-            }
-            this.data.set(Number(task.id), task)
-            resolve(this.data.get(Number(task.id)))
+                }
+            break;
+        }
+
+        let response = await fetch('/updatetask', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({
+                ID: Number(task.id),
+                Name: task.name,
+                Desc: task.desc,
+                Notes: task.notes,
+                Status: task.status,
+                Importance: task.importance,
+                Employee: task.employee,
+                PlanH: task.planH,
+                FactH: task.factH,
+                ProjectID: Number(task.projectId)
+            })
+        });
+
+        return await new Promise((resolve, reject) => {
+
+            resolve(response.json())
         })
     }
 
-    delete(task) {
-        return new Promise((resolve, reject) => {
-            this.data.delete(Number(task.id))
-            resolve()
+    // удаление задачи
+    async delete(task) {
+
+        let response = await fetch(`/task/${task.id}`, {
+                method: 'DELETE',
+            });
+
+        return await new Promise((resolve, reject) => {
+        
+            resolve(response.json())
         })
     }
 }
