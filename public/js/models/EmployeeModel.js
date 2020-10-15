@@ -2,72 +2,151 @@ import { Employee } from "./entities/Employee.js"
 
 class EmployeeModel {
 
-    constructor() {
-        this.data = new Map();
-        this.data.set(1, new Employee(1, "Иванов", "Иван", "Иванович", "Программист"));
-        this.data.set(2, new Employee(2, "Петров",  "Петр", "Петрович", "Тимлид"));
-        this.data.set(3, new Employee(3, "Васильев", "Василий", "Васильевич", "Программист"));
+    // получение всех работников
+    async getEmployees() {
+
+        let response = await fetch(`/employees`);
+        let result = await response.json();
+
+        if (result.Err == null) {
+
+            return new Promise((resolve, reject) => {
+                let employees = []
+    
+                for (let emp of result.Data) {
+
+                    let employee = new Employee( emp.id, emp.lastname, emp.firstname, emp.middlename, emp.position);
+
+                    employees.push(employee)
+                }
+    
+                resolve(employees)
+            })
+
+        } else {
+            webix.message("ОШИБКА");
+            console.log(result);
+        }
     }
 
-    getEmployees() {
+    // получение работников конкретного проекта
+    async getEmployeesByProjectId(projectId) {
 
-        return new Promise((resolve, reject) => {
-            let employees = []
+        let response = await fetch(`/employees/${projectId}`);
+        let result = await response.json();
 
-            for (let employee of this.data.values()) {
-                employees.push(employee)
-            }
+        if (result.Err == null) {
 
-            resolve(employees)
-        })
+            return new Promise((resolve, reject) => {
+                let employees = []
+    
+                if (result.Data != null) {
+                    
+                    for (let emp of result.Data) {
+
+                        let employee = new Employee( emp.id, emp.lastname, emp.firstname, emp.middlename, emp.position);
+
+                        employees.push(employee)
+                    }
+                }
+                
+                resolve(employees)
+            })
+
+        } else {
+            webix.message("ОШИБКА");
+            console.log(result);
+        }
     }
 
-    getEmployeesByProjectId(projectId) {
+    // получение работника по ID
+    async getEmployeeById(id) {
 
-        return new Promise((resolve, reject) => {
-            let employees = []
+        let response = await fetch(`/employee/${id}`);
 
-            for (let employee of this.data.values()) {
+        let e = await response.json();
 
-                employees.push(employee)
-            }
+        if (e.Err == null) {
 
-            resolve(employees)
-        })
-    }
-
-    getEmployeeById(id) {
-
-        return new Promise((resolve, reject) => {
-            resolve(this.data.get(Number(id)))
-        })
-
-    }
-
-    addEmployee(employee) {
-
-        return new Promise((resolve, reject) => {
-
-            if (currentProjectEmployees.some( (item) => item.id == employee.id)) {
-                webix.message('Сотрудник есть в текущем проекте!')
-            } else {
-                currentProjectEmployees.push(employee)
-            }
+            return new Promise((resolve, reject) => {
             
-            resolve()
-        })
+                let employee = new Employee( e.Data.id,
+                     e.Data.lastname, 
+                     e.Data.firstname, 
+                     e.Data.middlename, 
+                     e.Data.position);
+
+                resolve(employee)
+            })
+
+        } else {
+            console.log(response.Err)
+        }
+
     }
 
-    deleteEmployee(employee) {
-        return new Promise((resolve, reject) => {
+    // добавление сотрудника в проект
+    async addEmployee(employee) {
 
-            currentProjectEmployees.forEach( (item, i) => {
-                if (item.id == employee.id) {
-                    currentProjectEmployees.splice(i, 1)
-                }                
+        if (currentProjectEmployees.some( (item) => item.id == employee.id)) {
+            webix.message('Сотрудник есть в текущем проекте!')
+        } else {
+            currentProjectEmployees.push(employee)
+
+            let response = await fetch('/addemployee', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify({
+                    empID: Number(employee.id),
+                    projID: Number(currentProjectId)
+                })
             });
-            resolve()
-        })
+
+            if (response.status == 200) {
+
+                return new Promise((resolve, reject) => {
+                    
+                    resolve(response.json())
+                })
+
+            } else {
+                return "error"
+            }
+        }
+    }
+
+    // удаление сотрудника из проекта
+    async deleteEmployee(employee) {
+
+        currentProjectEmployees.forEach( (item, i) => {
+            if (item.id == employee.id) {
+                currentProjectEmployees.splice(i, 1)
+            }                
+        });
+
+        let response = await fetch('/delemployee', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({
+                empID: Number(employee.id),
+                projID: Number(currentProjectId)
+            })
+        });
+
+        if (response.status == 200) {
+
+            return new Promise((resolve, reject) => {
+                
+                resolve(response.json())
+            })
+
+        } else {
+            return "error"
+        }
     }
 }
 

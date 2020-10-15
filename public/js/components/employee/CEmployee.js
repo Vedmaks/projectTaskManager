@@ -36,17 +36,10 @@ export class CEmployee {
         // при открытии проекта, получение его работников
         $$('projectDatatable').attachEvent("onItemDblClick", (id) => {
             
-            employeeModel.getEmployeesByProjectId().then((employees) => {
+            employeeModel.getEmployeesByProjectId(id).then((employees) => {
                 window.currentProjectEmployees = employees
 
-                let employeesList = []
-
-                for (let employee of currentProjectEmployees) {
-
-                    employeesList.push(employee.value)
-                }
-
-                $$("oneTaskEmployee").define("options", employeesList)
+                this.refreshEmployeeList()
                 this.refreshTable()
             })          
         })
@@ -76,6 +69,7 @@ export class CEmployee {
                 employeeModel.addEmployee(employee).then(() => {
                     this.onChange()
                     this.view.addCombo.setValue("")
+                    this.refreshEmployeeList()
                 })
             })         
         })
@@ -102,5 +96,17 @@ export class CEmployee {
 
         this.view.datatable.clearAll()
         this.view.datatable.parse(currentProjectEmployees)
+    }
+
+    refreshEmployeeList() {
+
+        let employeesList = []
+
+        for (let employee of currentProjectEmployees) {
+
+            employeesList.push(employee.value)
+        }
+
+        $$("oneTaskEmployee").define("options", employeesList)
     }
 }

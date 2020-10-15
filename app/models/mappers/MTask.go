@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"projectTaskManager/app"
 	"projectTaskManager/app/models/entities"
+	"strings"
 
 	"github.com/revel/revel"
 )
@@ -37,6 +38,7 @@ func (m *MTask) GetTasksByProjectID() (ts []*entities.Task, err error) {
 		}
 
 		t.Status = m.convertStatusToString(t.Status)
+		t.Employee = m.convertEmployeeToString(t.Employee)
 		ts = append(ts, &t)
 	}
 
@@ -62,6 +64,7 @@ func (m *MTask) SelectByID(id int) (*entities.Task, error) {
 	err = row.Scan(&t.ID, &t.Name, &t.Desc, &t.Notes, &t.Status, &t.Importance, &t.Employee, &t.PlanH, &t.FactH, &t.ProjectID)
 
 	t.Status = m.convertStatusToString(t.Status)
+	t.Employee = m.convertEmployeeToString(t.Employee)
 	return &t, err
 }
 
@@ -149,5 +152,42 @@ func (m *MTask) convertStatusToString(statusID string) string {
 
 // Получение ID работника по ФИО
 func (m *MTask) convertEmployeeToID(employee *string) int {
-	return 1
+
+	test := strings.Split(*employee, " ")
+
+	query := "SELECT id FROM employees WHERE lastname = $1 AND firstname = $2"
+
+	row, err := app.DB.Query(query, test[0], test[1])
+
+	if err != nil {
+		return 0
+	}
+
+	defer row.Close()
+
+	row.Next()
+	var id int
+	err = row.Scan(&id)
+	return id
+}
+
+// Получение ФИО работника по ID
+func (m *MTask) convertEmployeeToString(employeeID *string) *string {
+	query := "SELECT lastname, firstname FROM employees WHERE id = $1"
+
+	row, err := app.DB.Query(query, employeeID)
+
+	if err != nil {
+		var err = "error"
+		return &err
+	}
+
+	defer row.Close()
+
+	row.Next()
+	var lastname string
+	var firstname string
+	err = row.Scan(&lastname, &firstname)
+	var fio = lastname + " " + firstname
+	return &fio
 }

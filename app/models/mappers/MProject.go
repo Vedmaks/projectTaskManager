@@ -10,7 +10,6 @@ import (
 
 // MProject маппер проектов
 type MProject struct {
-	//db *sql.DB
 }
 
 // SelectAll получение всех проектов

@@ -4,8 +4,9 @@ import (
 	"projectTaskManager/app/models/entities"
 	"projectTaskManager/app/models/providers/task_provider"
 
-	"github.com/mitchellh/mapstructure"
 	"github.com/revel/revel"
+
+	"encoding/json"
 )
 
 // CTask контроллер задач
@@ -39,18 +40,13 @@ func (c *CTask) GetTasksByProjectID() revel.Result {
 // CreateTask создание задачи
 func (c *CTask) CreateTask() revel.Result {
 
-	var jsonData map[string]interface{}
-	err := c.Params.BindJSON(&jsonData)
-
 	var id int
+	var newTask entities.Task
+
+	err := json.Unmarshal(c.Params.JSON, &newTask)
 
 	if err == nil {
-		var newTask entities.Task
-		mapstructure.Decode(jsonData, &newTask)
-
-		if err == nil {
-			id, err = c.p.CreateTask(&newTask)
-		}
+		id, err = c.p.CreateTask(&newTask)
 	}
 
 	response := entities.Resp{Data: id, Err: err}
@@ -60,16 +56,13 @@ func (c *CTask) CreateTask() revel.Result {
 
 // UpdateTask изменение задачи
 func (c *CTask) UpdateTask() revel.Result {
-	var jsonData map[string]interface{}
-	err := c.Params.BindJSON(&jsonData)
+
+	var Task entities.Task
+
+	err := json.Unmarshal(c.Params.JSON, &Task)
 
 	if err == nil {
-		var Task entities.Task
-		mapstructure.Decode(jsonData, &Task)
-
-		if err == nil {
-			err = c.p.UpdateTask(&Task)
-		}
+		err = c.p.UpdateTask(&Task)
 	}
 
 	response := entities.Resp{Data: nil, Err: err}

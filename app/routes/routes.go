@@ -98,6 +98,50 @@ func (_ tTestRunner) List(
 }
 
 
+type tCEmployee struct {}
+var CEmployee tCEmployee
+
+
+func (_ tCEmployee) GetEmployees(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CEmployee.GetEmployees", args).URL
+}
+
+func (_ tCEmployee) GetEmployeesByProjectID(
+		id int,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "id", id)
+	return revel.MainRouter.Reverse("CEmployee.GetEmployeesByProjectID", args).URL
+}
+
+func (_ tCEmployee) GetEmployeeByID(
+		id int,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "id", id)
+	return revel.MainRouter.Reverse("CEmployee.GetEmployeeByID", args).URL
+}
+
+func (_ tCEmployee) AddEmployee(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CEmployee.AddEmployee", args).URL
+}
+
+func (_ tCEmployee) DeleteEmployee(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CEmployee.DeleteEmployee", args).URL
+}
+
+
 type tCIndex struct {}
 var CIndex tCIndex
 

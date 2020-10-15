@@ -21,6 +21,12 @@ GET     /task/:id                               CTask.getTaskByID
 DELETE  /task/:id                               CTask.deleteTask
 POST    /updatetask                             CTask.updateTask
 
+GET     /employees                              CEmployee.getEmployees
+GET     /employees/:id                          CEmployee.getEmployeesByProjectID
+GET     /employee/:id                           CEmployee.getEmployeeByID
+POST    /addemployee                            CEmployee.addEmployee
+POST    /delemployee                            CEmployee.deleteEmployee
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 

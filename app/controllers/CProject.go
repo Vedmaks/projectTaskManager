@@ -4,7 +4,8 @@ import (
 	"projectTaskManager/app/models/entities"
 	"projectTaskManager/app/models/providers/project_provider"
 
-	"github.com/mitchellh/mapstructure"
+	"encoding/json"
+
 	"github.com/revel/revel"
 )
 
@@ -39,18 +40,12 @@ func (c *CProject) GetProjects() revel.Result {
 // CreateProject создание проекта
 func (c *CProject) CreateProject() revel.Result {
 
-	var jsonData map[string]interface{}
-	err := c.Params.BindJSON(&jsonData)
-
 	var id int
+	var newProject entities.Project
+	err := json.Unmarshal(c.Params.JSON, &newProject)
 
 	if err == nil {
-		var newProject entities.Project
-		mapstructure.Decode(jsonData, &newProject)
-
-		if err == nil {
-			id, err = c.p.CreateProject(&newProject)
-		}
+		id, err = c.p.CreateProject(&newProject)
 	}
 
 	response := entities.Resp{Data: id, Err: err}
@@ -60,21 +55,18 @@ func (c *CProject) CreateProject() revel.Result {
 
 // UpdateProject изменение проекта
 func (c *CProject) UpdateProject() revel.Result {
-	var jsonData map[string]interface{}
-	err := c.Params.BindJSON(&jsonData)
+
+	var Project entities.Project
+	err := json.Unmarshal(c.Params.JSON, &Project)
 
 	if err == nil {
-		var Project entities.Project
-		mapstructure.Decode(jsonData, &Project)
-
-		if err == nil {
-			err = c.p.UpdateProject(&Project)
-		}
+		err = c.p.UpdateProject(&Project)
 	}
 
 	response := entities.Resp{Data: nil, Err: err}
 
 	return c.RenderJSON(response)
+
 }
 
 // DeleteProject удаление проекта
