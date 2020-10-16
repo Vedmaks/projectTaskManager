@@ -28,6 +28,11 @@ func (p *PEmployee) GetEmployeeByID(id int) (e *entities.Employee, err error) {
 	return p.m.SelectByID(id)
 }
 
+// NewEmployee метод создания задачи
+func (p *PEmployee) NewEmployee(e *entities.Employee) (id int, err error) {
+	return p.m.NewEmployee(e)
+}
+
 // AddEmployee метод добавления сотрудника в проект
 func (p *PEmployee) AddEmployee(empID int64, projID int64) (id int, err error) {
 	return p.m.AddEmployee(empID, projID)

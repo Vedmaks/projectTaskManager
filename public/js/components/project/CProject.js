@@ -1,5 +1,6 @@
 import { ProjectView } from "./ProjectView.js"
 import { CProjectWindow } from "./projectWindow/CProjectWindow.js"
+import { CRegWindow } from "./regWindow/CRegWindow.js"
 import projectModel from "./../../models/ProjectModel.js"
 import { Project } from "./../../models/entities/Project.js"
 
@@ -7,6 +8,7 @@ export class CProject {
     constructor() {
       this.view
       this.window
+      this.reg
     }
     
     
@@ -14,10 +16,13 @@ export class CProject {
         this.window = new CProjectWindow()
         this.window.onChange = () => { this.refreshTable() }
         this.window.init()
+        this.reg = new CRegWindow()
+        this.reg.init()
     }
 
     config() {
         webix.ui(this.window.config())
+        webix.ui(this.reg.config())
         return ProjectView()
     }
 
@@ -26,11 +31,13 @@ export class CProject {
             datatable: $$('projectDatatable'),
             create: $$('createBtn'),
             remove: $$('removeBtn'),
+            reg: $$('employeesBtn'),
             edit: $$('editBtn'),
             getBack: $$("getBack1"),
             mainLabel: $$("mainLabel")
         }
 
+        this.reg.attachEvents()
         this.window.attachEvents()
 
         this.refreshTable()
@@ -67,6 +74,10 @@ export class CProject {
                 this.window.removeWindow()
             })
             
+        })
+
+        this.view.reg.attachEvent('onItemClick', () => {
+            $$('regWindow').show()
         })
 
         this.view.getBack.attachEvent('onItemClick', () => {

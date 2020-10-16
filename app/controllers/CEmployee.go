@@ -40,6 +40,23 @@ func (c *CEmployee) GetEmployeeByID(id int) revel.Result {
 	return c.RenderJSON(response)
 }
 
+// NewEmployee регистрация сотрудника
+func (c *CEmployee) NewEmployee() revel.Result {
+
+	var id int
+	var newEmployee entities.Employee
+
+	err := json.Unmarshal(c.Params.JSON, &newEmployee)
+
+	if err == nil {
+		id, err = c.p.NewEmployee(&newEmployee)
+	}
+
+	response := entities.Resp{Data: id, Err: err}
+
+	return c.RenderJSON(response)
+}
+
 // AddEmployee добавление сотрудника к проекту
 func (c *CEmployee) AddEmployee() revel.Result {
 

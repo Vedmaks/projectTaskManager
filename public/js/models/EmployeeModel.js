@@ -85,6 +85,34 @@ class EmployeeModel {
 
     }
 
+    // регистрация сотрудника
+    async newEmployee(employee) {
+
+        let response = await fetch('/newemployee', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({
+                lastname: employee.lastname,
+                firstname: employee.firstname,
+                middlename: employee.middlename,
+                position: employee.position,
+                email: employee.email
+            })
+        });
+        if (response.status == 200) {
+
+            return new Promise((resolve, reject) => {
+                
+                resolve(response.json())
+            })
+
+        } else {
+            return "error"
+        }
+    }
+
     // добавление сотрудника в проект
     async addEmployee(employee) {
 

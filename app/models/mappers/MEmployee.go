@@ -94,6 +94,20 @@ func (m *MEmployee) SelectByID(id int) (*entities.Employee, error) {
 	return &e, err
 }
 
+// NewEmployee добавление задачи
+func (m *MEmployee) NewEmployee(e *entities.Employee) (id int, err error) {
+	query := "INSERT INTO employees (lastname, firstname, middlename, position, email) VALUES ($1, $2, $3, $4, $5) RETURNING id"
+
+	err = app.DB.QueryRow(query,
+		e.Lastname,
+		e.Firstname,
+		e.Middlename,
+		e.Position,
+		e.Email).Scan(&id)
+
+	return id, err
+}
+
 // AddEmployee добавление сотрудника в проект
 func (m *MEmployee) AddEmployee(empID int64, projID int64) (id int, err error) {
 	query := "INSERT INTO tok_emp_proj (emp_id, proj_id) VALUES ($1, $2) RETURNING id"

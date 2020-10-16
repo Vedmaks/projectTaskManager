@@ -127,6 +127,13 @@ func (_ tCEmployee) GetEmployeeByID(
 	return revel.MainRouter.Reverse("CEmployee.GetEmployeeByID", args).URL
 }
 
+func (_ tCEmployee) NewEmployee(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CEmployee.NewEmployee", args).URL
+}
+
 func (_ tCEmployee) AddEmployee(
 		) string {
 	args := make(map[string]string)
@@ -239,6 +246,18 @@ func (_ tCTask) DeleteTask(
 	
 	revel.Unbind(args, "id", id)
 	return revel.MainRouter.Reverse("CTask.DeleteTask", args).URL
+}
+
+
+type tCUser struct {}
+var CUser tCUser
+
+
+func (_ tCUser) NewUser(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CUser.NewUser", args).URL
 }
 
 

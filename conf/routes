@@ -26,6 +26,10 @@ GET     /employees/:id                          CEmployee.getEmployeesByProjectI
 GET     /employee/:id                           CEmployee.getEmployeeByID
 POST    /addemployee                            CEmployee.addEmployee
 POST    /delemployee                            CEmployee.deleteEmployee
+POST    /newemployee                            CEmployee.newEmployee
+
+POST    /newuser                                CUser.newUser
+
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

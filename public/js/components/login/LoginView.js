@@ -7,15 +7,18 @@ export function LoginView() {
         id: "loginForm",
         "view": "form",
         "padding": {
-          "top": 200,
+          "top": 120,
           "bottom": 200,
           "left": 400,
           "right": 400
         },
         "rows": [
+          { template:"Авторизация", type:"section"},
           { "view": "text", "label": "Логин", "name": "login" },
           { "view": "text", "label": "Пароль", type: "password", "name": "password" },
-          { view: "button", id: "confirmLogin", css: "webix_primary", label: "Войти" , hotkey: "enter"}
+          { view: "button", id: "confirmLogin", css: "webix_primary", label: "Войти" , hotkey: "enter"},
+          { template:"Регистрация", type:"section"},
+          { view: "button", id: "regUserBtn", css: "webix_primary", label: "Зарегистрироваться"},
         ]
       }
     ]

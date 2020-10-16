@@ -1,17 +1,21 @@
 import { LoginView } from "./LoginView.js"
 import employeeModel from "./../../models/EmployeeModel.js"
+import { CRegUserWindow } from "./regUserWindow/CRegUserWindow.js"
 
 export class CLogin {
     constructor() {
-        this.view      
+        this.view
+        this.reg
     }
     
     
     init() {
-    
+        this.reg = new CRegUserWindow()
+        this.reg.init()
     }
 
     config() {
+        webix.ui(this.reg.config())
         return LoginView()
     }
 
@@ -27,7 +31,14 @@ export class CLogin {
             CRUDToolbar: $$("CRUDToolbar"),
             setEmployees: $$("setEmployees"),
             agreementDatatable: $$('agreementDatatable'),
+            reg: $$('regUserBtn'),
         }
+
+        this.reg.attachEvents()
+
+        this.view.reg.attachEvent('onItemClick', () => {
+            $$('regUserWindow').show()
+        })
 
         this.view.confirmLogin.attachEvent('onItemClick', () => {
 
