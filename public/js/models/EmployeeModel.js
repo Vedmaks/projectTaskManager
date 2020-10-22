@@ -15,7 +15,7 @@ class EmployeeModel {
     
                 for (let emp of result.Data) {
 
-                    let employee = new Employee( emp.id, emp.lastname, emp.firstname, emp.middlename, emp.position);
+                    let employee = new Employee( emp.id, emp.lastname, emp.firstname, emp.middlename, emp.position, emp.email);
 
                     employees.push(employee)
                 }
@@ -44,7 +44,7 @@ class EmployeeModel {
                     
                     for (let emp of result.Data) {
 
-                        let employee = new Employee( emp.id, emp.lastname, emp.firstname, emp.middlename, emp.position);
+                        let employee = new Employee( emp.id, emp.lastname, emp.firstname, emp.middlename, emp.position, emp.email);
 
                         employees.push(employee)
                     }
@@ -74,7 +74,8 @@ class EmployeeModel {
                      e.Data.lastname, 
                      e.Data.firstname, 
                      e.Data.middlename, 
-                     e.Data.position);
+                     e.Data.position,
+                     e.Data.email);
 
                 resolve(employee)
             })
@@ -113,6 +114,43 @@ class EmployeeModel {
         }
     }
 
+    //изменение сотрудника
+    async updateEmployee(employee) {
+
+        let response = await fetch('/updateemployee', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({
+                id: employee.id,
+                lastname: employee.lastname,
+                firstname: employee.firstname,
+                middlename: employee.middlename,
+                position: employee.position,
+                email: employee.email
+            })
+        });
+
+        return await new Promise((resolve, reject) => {
+            
+            resolve(response.json())
+        })
+    }
+
+    // удаление сотрудника
+    async deleteEmployee(employee) {
+
+        let response = await fetch(`/employee/${employee.id}`, {
+                method: 'DELETE',
+            });
+
+        return await new Promise((resolve, reject) => {
+        
+            resolve(response.json())
+        })
+    }
+
     // добавление сотрудника в проект
     async addEmployee(employee) {
 
@@ -146,7 +184,7 @@ class EmployeeModel {
     }
 
     // удаление сотрудника из проекта
-    async deleteEmployee(employee) {
+    async removeEmployee(employee) {
 
         currentProjectEmployees.forEach( (item, i) => {
             if (item.id == employee.id) {
@@ -154,7 +192,7 @@ class EmployeeModel {
             }                
         });
 
-        let response = await fetch('/delemployee', {
+        let response = await fetch('/removeemployee', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json;charset=utf-8'

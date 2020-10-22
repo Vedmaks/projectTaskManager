@@ -57,6 +57,31 @@ func (c *CEmployee) NewEmployee() revel.Result {
 	return c.RenderJSON(response)
 }
 
+// UpdateEmployee регистрация сотрудника
+func (c *CEmployee) UpdateEmployee() revel.Result {
+
+	var Employee entities.Employee
+
+	err := json.Unmarshal(c.Params.JSON, &Employee)
+
+	if err == nil {
+		err = c.p.UpdateEmployee(&Employee)
+	}
+
+	response := entities.Resp{Data: nil, Err: err}
+
+	return c.RenderJSON(response)
+}
+
+// DeleteEmployee удаление проекта
+func (c *CEmployee) DeleteEmployee(id int) revel.Result {
+
+	err := c.p.DeleteEmployee(id)
+	response := entities.Resp{Data: nil, Err: err}
+
+	return c.RenderJSON(response)
+}
+
 // AddEmployee добавление сотрудника к проекту
 func (c *CEmployee) AddEmployee() revel.Result {
 
@@ -76,8 +101,8 @@ func (c *CEmployee) AddEmployee() revel.Result {
 	return c.RenderJSON(response)
 }
 
-// DeleteEmployee удаление сотрудника из проекта
-func (c *CEmployee) DeleteEmployee() revel.Result {
+// RemoveEmployee удаление сотрудника из проекта
+func (c *CEmployee) RemoveEmployee() revel.Result {
 
 	var tok struct {
 		EmpID  int64
@@ -86,7 +111,7 @@ func (c *CEmployee) DeleteEmployee() revel.Result {
 	err := json.Unmarshal(c.Params.JSON, &tok)
 
 	if err == nil {
-		err = c.p.DeleteEmployee(tok.EmpID, tok.ProjID)
+		err = c.p.RemoveEmployee(tok.EmpID, tok.ProjID)
 	}
 
 	response := entities.Resp{Data: nil, Err: err}

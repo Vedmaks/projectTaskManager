@@ -1,5 +1,4 @@
 import RegUserWindowView from "./RegUserWindowView.js"
-import employeeModel from "../../../models/EmployeeModel.js"
 
 export class CRegUserWindow {
     constructor() {
@@ -28,23 +27,48 @@ export class CRegUserWindow {
             if(this.view.form.validate()) {   
                 
                 if (user.password1 === user.password2) {
-                    this.newUser(user).then(() => {
-                        this.view.window.hide()
-                        this.view.form.clear()
-                    }) 
+
+                    this.emailCheck(user.email).then((result) => {
+                        if (result) {
+
+                            this.newUser(user).then(() => {
+                                this.view.window.hide()
+                                this.view.form.clear()
+                            })
+                        }
+                    })
+                    
                 } else webix.message('Пароли не совпадают!')                   
             }   
         })
 
         this.view.windowCancelBtn.attachEvent('onItemClick', () => {
             this.view.window.hide()
+            this.view.form.clear()
         })
     }
+
+    async emailCheck(email) {
+
+        let response = await fetch(`/emailcheck/${email}`)
+        let result = await response.json();
+       
+        if (result.Data == "ok") {
+            return new Promise((resolve, reject) => {
+            
+                resolve(true)
+            })
+        } else {
+            webix.message(result.Data);
+            return new Promise((resolve, reject) => {
+            
+                resolve(false)
+            })
+        }
+    }
     
-
+    // регистрация нового пользователя
     async newUser(user) {
-
-        user.password = user.password1
 
         let response = await fetch('/newuser', {
             method: 'POST',
@@ -53,7 +77,7 @@ export class CRegUserWindow {
             },
             body: JSON.stringify({
                 email: user.email,
-                password: user.password,                
+                password: user.password1,                
             })
         });
         if (response.status == 200) {
@@ -72,20 +96,4 @@ export class CRegUserWindow {
     fetch() {
         return this.view.form.getValues()
     }
-
-    // валидация формы
-   /* validation(employee) {
-
-        let checkResult = false
-        let lastname = employee.lastname
-        let firstname = employee.firstname
-        let middlename = employee.middlename
-        let position = employee.position
-        let email = employee.email
-        
-        checkResult = true
-
-        return checkResult
-
-    }*/
 }

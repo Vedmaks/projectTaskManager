@@ -8,14 +8,14 @@ import (
 	"github.com/revel/revel"
 )
 
-// MEmployee маппер задач
+// MEmployee маппер сотрудников
 type MEmployee struct {
 }
 
 // GetEmployees получение всех сотрудников
 func (m *MEmployee) GetEmployees() (es []*entities.Employee, err error) {
 
-	query := `SELECT id, lastname, firstname, middlename, position FROM employees;`
+	query := `SELECT id, lastname, firstname, middlename, position, email FROM employees;`
 
 	rows, err := app.DB.Query(query)
 	if err != nil {
@@ -30,7 +30,7 @@ func (m *MEmployee) GetEmployees() (es []*entities.Employee, err error) {
 	for rows.Next() {
 		e := entities.Employee{}
 
-		err = rows.Scan(&e.ID, &e.Lastname, &e.Firstname, &e.Middlename, &e.Position)
+		err = rows.Scan(&e.ID, &e.Lastname, &e.Firstname, &e.Middlename, &e.Position, &e.Email)
 		if err != nil {
 			revel.AppLog.Errorf("MEmployee.GetEmployees : rows.Scan, %s\n", err)
 			continue
@@ -46,7 +46,7 @@ func (m *MEmployee) GetEmployees() (es []*entities.Employee, err error) {
 // GetEmployeesByProjectID получение всех сотрудников проекта
 func (m *MEmployee) GetEmployeesByProjectID(id int) (es []*entities.Employee, err error) {
 
-	query := `SELECT e.id, lastname, firstname, middlename, position FROM employees e JOIN tok_emp_proj t ON e.id = t.emp_id WHERE t.proj_id = $1;`
+	query := `SELECT e.id, lastname, firstname, middlename, position, email FROM employees e JOIN tok_emp_proj t ON e.id = t.emp_id WHERE t.proj_id = $1;`
 
 	rows, err := app.DB.Query(query, id)
 	if err != nil {
@@ -61,7 +61,7 @@ func (m *MEmployee) GetEmployeesByProjectID(id int) (es []*entities.Employee, er
 	for rows.Next() {
 		e := entities.Employee{}
 
-		err = rows.Scan(&e.ID, &e.Lastname, &e.Firstname, &e.Middlename, &e.Position)
+		err = rows.Scan(&e.ID, &e.Lastname, &e.Firstname, &e.Middlename, &e.Position, &e.Email)
 		if err != nil {
 			revel.AppLog.Errorf("MEmployee.GetEmployeesByProjectID : rows.Scan, %s\n", err)
 			continue
@@ -77,7 +77,7 @@ func (m *MEmployee) GetEmployeesByProjectID(id int) (es []*entities.Employee, er
 // SelectByID получение сотрудника по ID
 func (m *MEmployee) SelectByID(id int) (*entities.Employee, error) {
 
-	query := "SELECT id, lastname, firstname, middlename, position FROM employees WHERE id = $1"
+	query := "SELECT id, lastname, firstname, middlename, position, email FROM employees WHERE id = $1"
 
 	row, err := app.DB.Query(query, id)
 
@@ -89,7 +89,7 @@ func (m *MEmployee) SelectByID(id int) (*entities.Employee, error) {
 
 	row.Next()
 	e := entities.Employee{}
-	err = row.Scan(&e.ID, &e.Lastname, &e.Firstname, &e.Middlename, &e.Position)
+	err = row.Scan(&e.ID, &e.Lastname, &e.Firstname, &e.Middlename, &e.Position, &e.Email)
 
 	return &e, err
 }
@@ -108,6 +108,30 @@ func (m *MEmployee) NewEmployee(e *entities.Employee) (id int, err error) {
 	return id, err
 }
 
+// UpdateEmployee добавление задачи
+func (m *MEmployee) UpdateEmployee(e *entities.Employee) (err error) {
+	query := "UPDATE employees SET lastname = $2, firstname = $3, middlename = $4, position = $5, email = $6 WHERE id = $1"
+	_, err = app.DB.Exec(query,
+		e.ID,
+		e.Lastname,
+		e.Firstname,
+		e.Middlename,
+		e.Position,
+		e.Email)
+
+	return err
+}
+
+// DeleteEmployee удаление проекта
+func (m *MEmployee) DeleteEmployee(id int) (err error) {
+
+	query := "DELETE FROM employees WHERE id = $1"
+
+	_, err = app.DB.Exec(query, id)
+
+	return err
+}
+
 // AddEmployee добавление сотрудника в проект
 func (m *MEmployee) AddEmployee(empID int64, projID int64) (id int, err error) {
 	query := "INSERT INTO tok_emp_proj (emp_id, proj_id) VALUES ($1, $2) RETURNING id"
@@ -117,8 +141,8 @@ func (m *MEmployee) AddEmployee(empID int64, projID int64) (id int, err error) {
 	return id, err
 }
 
-// DeleteEmployee удаление сотрудника из проекта
-func (m *MEmployee) DeleteEmployee(empID int64, projID int64) (err error) {
+// RemoveEmployee удаление сотрудника из проекта
+func (m *MEmployee) RemoveEmployee(empID int64, projID int64) (err error) {
 
 	query := "DELETE FROM tok_emp_proj WHERE emp_id = $1 AND proj_id = $2"
 

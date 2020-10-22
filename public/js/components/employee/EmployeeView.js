@@ -1,52 +1,32 @@
-import employeeModel from "./../../models/EmployeeModel.js"
+export function EmployeeView() {
+	return {
+		id: "employee", hidden: true,
+		rows: [
+			{
+				css: "webix_dark",
+				view: "toolbar",
+				id: "EmployeeToolbar",
+				hidden: false,
+				cols: [
+					{ view: "button", id: "createEmployee", label: "Новый сотрудник", height: 0 },
+					{ label: "Редактировать", id: "editEmployee", view: "button", height: 0 },
+					{ label: "Удалить", id: "deleteEmployee", view: "button", height: 0 },
+				],
+				height: 45
+			},
+			{
+				columns: [
+                    { name: "lastname", id: "lastname", header: ["Фамилия", {content: "textFilter"}], fillspace: false, width: 120, sort: "string"},
+                    { name: "firstname", id: "firstname", header: "Имя", fillspace: false, width: 120, sort: "string"},
+                    { name: "middlename", id: "middlename", header: "Отчество", fillspace: false, width: 120, sort: "string"},
+                    { name: "position", id: "position", header: ["Должность", {content: "selectFilter"}], fillspace: false, width: 120, sort: "string"},
+                    { name: "email", id: "email", header: "Email", fillspace: true, sort: "string", adjust: "data" },
+					
+				],
+				view: "datatable", id : "employeeDatatable", select: true, scrollX: false,
+				borderless: 0, data: [],
+			}
+		]
 
-export default function EmployeeView() {
-    return {
-        view: 'window',
-        id: 'employeeWindow',
-        width: 1000,
-        head: {
-            view: 'template',
-            id: 'employeeWindowLabel',
-            template: "Сотрудники проекта",
-            css: 'webix_template'
-        },
-        modal: true,
-        position:"center",
-        body: {
-            cols: [
-                {
-                    columns: [
-                        {id: "lastname", header: "Фамилия", name: "lastname", sort: "string", },
-                        {id: "firstname", header: "Имя", name: "firstname", sort: "string",},
-                        {id: "middlename", header: "Отчество", sort: "string", name: "middlename", },
-                        {id: "position", header: "Должность", sort: "string", name: "position", fillspace: true, },
-                    ],
-                    "view": "datatable",
-                    id: "employeeDatatable",
-                    select: true,
-                    scrollX: false,
-                    height: 400,
-                    width: 500,
-                    "borderless": 0,
-                    data: []
-                },
-                {
-                    view: 'form', 
-                    id: 'employeeWindowForm',
-                    autowidth: true,
-                    elements: [
-                        { template:"Добавить", type:"section"},
-                        { view:"combo", id:"addCombo", value:"", width: 300,
-                         options: []},
-                        { view: 'button', id: 'addEmployee', value: 'Добавить', },
-                        { template:"Удалить", type:"section"},
-                        { view: 'button', id: 'deleteEmployee', value: 'Удалить', },
-                        { template:"", type:"section"},
-                        { view: 'button', id: 'employeeWindowCancelBtn', value: 'Закрыть', },
-                    ]
-                }
-            ]
-        }
-    }
+	}
 }

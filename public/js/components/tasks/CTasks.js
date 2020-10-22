@@ -1,7 +1,7 @@
 import { TasksView } from "./TasksView.js"
 import { CTasksWindow } from "./tasksWindow/CTasksWindow.js"
 import taskModel from "./../../models/TaskModel.js"
-import { CEmployee } from "./../employee/CEmployee.js"
+import { CEmployeeAppointment } from "./../employee/employeeAppointment/CEmployeeAppointment.js"
 import { Task } from "./../../models/entities/Task.js"
 
 
@@ -9,6 +9,7 @@ export class CTasks {
     constructor() {
       this.view
       this.window
+      this.employeeAppointment
     }
     
     
@@ -16,10 +17,12 @@ export class CTasks {
         this.window = new CTasksWindow()
         this.window.onChange = () => { this.refreshTable() }
         this.window.init()
+        this.employeeAppointment = new CEmployeeAppointment()
+        this.employeeAppointment.init()
     }
 
     config() {
-        webix.ui( new CEmployee().config() )
+        webix.ui(this.employeeAppointment.config())
         webix.ui(this.window.config())
         return TasksView()
     }
@@ -51,6 +54,9 @@ export class CTasks {
 
         //Добавление событий окна
         this.window.attachEvents()
+
+        ///Добавление событий окна сотрудников
+        this.employeeAppointment.attachEvents()
 
         //Обновление таблицы при показе
         this.view.tasks.attachEvent("onViewShow", () => { this.refreshTable() });
@@ -131,14 +137,14 @@ export class CTasks {
                 this.view.confirm.setValue('Изменить статус на "Новая"')
             break;
 
-            case "Новая":
-                this.view.taskDesc.enable()
-                this.view.taskNotes.enable()                
+            case "Новая":               
                 this.view.confirm.setValue('Изменить статус на "Назначена"')
                 
                 if (currentUser.role === "admin") {
                     this.view.taskImportance.enable()
-                    this.view.taskEmployee.enable() 
+                    this.view.taskEmployee.enable()
+                    this.view.taskDesc.enable()
+                    this.view.taskNotes.enable() 
                     this.view.oneTaskDelete.show()
                     this.view.oneTaskConfirm.show()
                 }

@@ -1,28 +1,22 @@
 import { ProjectView } from "./ProjectView.js"
 import { CProjectWindow } from "./projectWindow/CProjectWindow.js"
-import { CRegWindow } from "./regWindow/CRegWindow.js"
 import projectModel from "./../../models/ProjectModel.js"
 import { Project } from "./../../models/entities/Project.js"
 
 export class CProject {
     constructor() {
-      this.view
-      this.window
-      this.reg
+        this.view
+        this.window
     }
-    
     
     init() {
         this.window = new CProjectWindow()
         this.window.onChange = () => { this.refreshTable() }
         this.window.init()
-        this.reg = new CRegWindow()
-        this.reg.init()
     }
 
     config() {
         webix.ui(this.window.config())
-        webix.ui(this.reg.config())
         return ProjectView()
     }
 
@@ -31,22 +25,23 @@ export class CProject {
             datatable: $$('projectDatatable'),
             create: $$('createBtn'),
             remove: $$('removeBtn'),
-            reg: $$('employeesBtn'),
+            employees: $$('employeesBtn'),
             edit: $$('editBtn'),
             getBack: $$("getBack1"),
             mainLabel: $$("mainLabel")
         }
 
-        this.reg.attachEvents()
         this.window.attachEvents()
 
         this.refreshTable()
 
+        // создание нового проекта
         this.view.create.attachEvent('onItemClick', () => {
             this.window.parse(new Project())
             this.window.createWindow()
         })
 
+        // редактирование проекта
         this.view.edit.attachEvent('onItemClick', () => {
             let item = this.view.datatable.getSelectedItem()
 
@@ -62,6 +57,7 @@ export class CProject {
             
         })
 
+        // удаление проекта
         this.view.remove.attachEvent('onItemClick', () => {
             let item = this.view.datatable.getSelectedItem()
             if (!item) {
@@ -73,42 +69,32 @@ export class CProject {
                 this.window.parse(project)
                 this.window.removeWindow()
             })
-            
         })
 
-        this.view.reg.attachEvent('onItemClick', () => {
-            $$('regWindow').show()
+        // открытие таблицы работников
+        this.view.employees.attachEvent('onItemClick', () => {
+            $$('employee').show()
+            $$("project").hide()
+            this.view.getBack.show()
+            this.view.mainLabel.setHTML("Сотрудники")
         })
 
+        // возвращение к проектам
         this.view.getBack.attachEvent('onItemClick', () => {
             $$("project").show()
             $$("tasks").hide()
+            $$('employee').hide()
             this.view.getBack.hide()
             this.view.mainLabel.setHTML("ПРОЕКТЫ")
-        })
-
-        // переход к выбраному проекту
-        this.view.datatable.attachEvent("onItemDblClick", (id) => {
-            let item = this.view.datatable.getItem(id)
-            window.currentProjectId = item.id;
-            $$("tasks").show()
-            $$("project").hide()
-            this.view.getBack.show()
-            this.view.mainLabel.setHTML("Задачи: " + item.name)
         })
     }
 
     // обновление таблицы проектов
-    refreshTable(projects) {
-        if (projects) {
+    refreshTable() {
+       
+        projectModel.getProjects().then((projects) => {
             this.view.datatable.clearAll()
             this.view.datatable.parse(projects)
-            return
-        } else {
-            projectModel.getProjects().then((projects) => {
-                this.view.datatable.clearAll()
-                this.view.datatable.parse(projects)
-            })
-        }
+        })
     }
 }

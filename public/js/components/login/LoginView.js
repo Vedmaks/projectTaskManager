@@ -14,7 +14,7 @@ export function LoginView() {
         },
         "rows": [
           { template:"Авторизация", type:"section"},
-          { "view": "text", "label": "Логин", "name": "login" },
+          { "view": "text", "label": "Email", "name": "email" },
           { "view": "text", "label": "Пароль", type: "password", "name": "password" },
           { view: "button", id: "confirmLogin", css: "webix_primary", label: "Войти" , hotkey: "enter"},
           { template:"Регистрация", type:"section"},

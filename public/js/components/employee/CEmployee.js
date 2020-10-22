@@ -1,112 +1,84 @@
-import EmployeeView from "./EmployeeView.js"
+import { EmployeeView } from "./EmployeeView.js"
+import { CEmployeeWindow } from "./employeeWindow/CEmployeeWindow.js"
 import employeeModel from "./../../models/EmployeeModel.js"
+import { Employee } from "./../../models/entities/Employee.js"
 
 export class CEmployee {
     constructor() {
-        this.view      
+      this.view
+      this.window
     }
     
     
     init() {
-        this.onChange = () => { this.refreshTable() }
+        this.window = new CEmployeeWindow()
+        this.window.onChange = () => { this.refreshTable() }
+        this.window.init()
     }
 
     config() {
+        webix.ui(this.window.config())
         return EmployeeView()
     }
 
     attachEvents() {
-
         this.view = {
-            window: $$('employeeWindow'),
-            windowClose: $$('employeeWindowCancelBtn'),
-            windowOpen: $$("setEmployees"),
-            form: $$('employeeWindowForm'),
-            addEmployee: $$('addEmployee'),
-            deleteEmployee: $$('deleteEmployee'),
+            datatable: $$('employeeDatatable'),
+            create: $$('createEmployee'),
+            delete: $$('deleteEmployee'),
+            edit: $$('editEmployee'),
+            getBack: $$("getBack1"),
+            mainLabel: $$("mainLabel"),
             addCombo: $$('addCombo'),
-            datatable: $$("employeeDatatable")
         }
 
-        // получение всех сотрудников для списка назначения
-        employeeModel.getEmployees().then((employees) => {
-            this.view.addCombo.define("options", employees)            
+        this.window.attachEvents()
+
+        this.refreshTable()
+
+        this.view.create.attachEvent('onItemClick', () => {
+            this.window.parse(new Employee())
+            this.window.createWindow()
         })
 
-        // при открытии проекта, получение его работников
-        $$('projectDatatable').attachEvent("onItemDblClick", (id) => {
-            
-            employeeModel.getEmployeesByProjectId(id).then((employees) => {
-                window.currentProjectEmployees = employees
-
-                this.refreshEmployeeList()
-                this.refreshTable()
-            })          
-        })
-
-        // открытие окна назначения сотрудников
-        this.view.windowOpen.attachEvent('onItemClick', () => {
-            this.view.window.show()
-        })
-
-        // закрытие окна назначения сотрудников
-        this.view.windowClose.attachEvent('onItemClick', () => {
-            this.view.form.clear()
-            this.view.window.hide()
-        })
-
-        // добавление сотрудника к проекту
-        this.view.addEmployee.attachEvent('onItemClick', () => {
-
-            let addedEmployee = this.view.addCombo.getValue()
-
-            if(addedEmployee == "") {
-                webix.message('Выберите сотрудника!')
-                return
-            } 
-
-            employeeModel.getEmployeeById(addedEmployee).then((employee) => {
-                employeeModel.addEmployee(employee).then(() => {
-                    this.onChange()
-                    this.view.addCombo.setValue("")
-                    this.refreshEmployeeList()
-                })
-            })         
-        })
-
-        // удаление сотрудника из проекта
-        this.view.deleteEmployee.attachEvent('onItemClick', () => {
-
+        this.view.edit.attachEvent('onItemClick', () => {
             let item = this.view.datatable.getSelectedItem()
+
             if (!item) {
-                webix.message('Выберите сотрудника!')
+                webix.message('Выделите строку')
                 return
             }
 
             employeeModel.getEmployeeById(item.id).then((employee) => {
-                employeeModel.deleteEmployee(employee).then(() => {
-                    this.onChange()
-                })
-            })     
+                this.window.parse(employee)
+                this.window.editWindow()
+            })
+            
+        })
+
+        this.view.delete.attachEvent('onItemClick', () => {
+            let item = this.view.datatable.getSelectedItem()
+            if (!item) {
+                webix.message('Выделите строку')
+                return
+            }
+
+            employeeModel.getEmployeeById(item.id).then((employee) => {
+                this.window.parse(employee)
+                this.window.removeWindow()
+            })
+            
         })
     }
 
-    // обновление таблицы сотрудников проекта
+    // обновление таблицы проектов
     refreshTable() {
-
-        this.view.datatable.clearAll()
-        this.view.datatable.parse(currentProjectEmployees)
-    }
-
-    refreshEmployeeList() {
-
-        let employeesList = []
-
-        for (let employee of currentProjectEmployees) {
-
-            employeesList.push(employee.value)
-        }
-
-        $$("oneTaskEmployee").define("options", employeesList)
+        
+        employeeModel.getEmployees().then((employees) => {
+            this.view.datatable.clearAll()
+            this.view.datatable.parse(employees)
+            this.view.addCombo.define("options", employees)
+        })
+        
     }
 }

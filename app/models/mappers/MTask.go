@@ -84,6 +84,22 @@ func (m *MTask) Insert(t *entities.Task) (id int, err error) {
 // Update изменение задачи
 func (m *MTask) Update(t *entities.Task) (err error) {
 
+	if t.Status == "Новая" {
+
+		query := "UPDATE tasks SET task_name = $2, description = $3, notes = $4, status_id = $5, project_id = $6 WHERE id = $1"
+
+		_, err = app.DB.Exec(query,
+			t.ID,
+			t.Name,
+			t.Desc,
+			t.Notes,
+			m.convertStatusToID(t.Status),
+			t.ProjectID)
+
+		return err
+
+	}
+
 	query := "UPDATE tasks SET task_name = $2, description = $3, notes = $4, status_id = $5, importance = $6, employee_id = $7, planh = $8, facth= $9, project_id = $10 WHERE id = $1"
 
 	_, err = app.DB.Exec(query,

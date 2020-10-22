@@ -42,7 +42,7 @@ export class Application {
 				cols: [
                     { view: "button", id: "getBack1", label: "К проектам", hidden: "true", autowidth: true, width: 1 },
                     { view: "button", id: "getBack2", label: "К задачам", hidden: "true", autowidth: true, width: 1 },
-					{ view: "label", id:"mainLabel", label: "Авторизация" },
+					{ view: "label", id:"mainLabel", label: "Welcome to Tasker!" },
                     { view: "template", role: "placeholder", width: 460, borderless: 1 },
 					{ view: "label", id: "currentUserLabel", label: "", role: "placeholder", width: 170, borderless: 1 },
                     { view: "button", id: "logout", label: "Выйти", hidden: "true", autowidth: true, width: 1 },
@@ -52,6 +52,7 @@ export class Application {
                this.project.config(),
                this.tasks.config(),
                this.oneTask.config(),
+               this.employee.config(),
            ]
 
        }

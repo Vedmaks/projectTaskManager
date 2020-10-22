@@ -1,97 +1,50 @@
 import { LoginView } from "./LoginView.js"
-import employeeModel from "./../../models/EmployeeModel.js"
+import loginModel from "./../../models/LoginModel.js"
 import { CRegUserWindow } from "./regUserWindow/CRegUserWindow.js"
+
 
 export class CLogin {
     constructor() {
         this.view
-        this.reg
+        this.window
     }
     
     
     init() {
-        this.reg = new CRegUserWindow()
-        this.reg.init()
+        this.window = new CRegUserWindow()
+        this.window.init()
     }
 
     config() {
-        webix.ui(this.reg.config())
+        webix.ui(this.window.config())
         return LoginView()
     }
 
     attachEvents() {
         this.view = {
-            confirmLogin: $$('confirmLogin'),
+            confirm: $$('confirmLogin'),
             logout: $$('logout'),
-            login: $$('login'),
-            project: $$('project'),
-            mainLabel: $$('mainLabel'),
-            loginForm: $$('loginForm'),
-            currentUserLabel: $$("currentUserLabel"),
-            CRUDToolbar: $$("CRUDToolbar"),
-            setEmployees: $$("setEmployees"),
-            agreementDatatable: $$('agreementDatatable'),
-            reg: $$('regUserBtn'),
+            registration: $$('regUserBtn'),
         }
 
-        this.reg.attachEvents()
+        loginModel.attachEvents()
 
-        this.view.reg.attachEvent('onItemClick', () => {
+        this.window.attachEvents()
+
+        loginModel.autoLogin()
+
+        this.view.registration.attachEvent('onItemClick', () => {
             $$('regUserWindow').show()
         })
 
-        this.view.confirmLogin.attachEvent('onItemClick', () => {
-
-            let employeeId
-            employeeId = this.verification()
-
-            if (employeeId) {
-                
-                employeeModel.getEmployeeById(employeeId).then((employee) => {
-                    window.currentUser = employee
-                    this.view.currentUserLabel.setHTML(`${currentUser.lastname} ${currentUser.firstname}`)
-
-                    if (currentUser.position == "Тимлид" || currentUser.position == "Админ") {
-                        currentUser.role = "admin"
-                        this.view.CRUDToolbar.show()
-                        this.view.setEmployees.show()
-                        this.view.agreementDatatable.enable()
-                    } else currentUser.role = "employee"
-
-                    this.view.login.hide()
-                    this.view.project.show()
-                    this.view.logout.show()
-                    this.view.mainLabel.setHTML("ПРОЕКТЫ")
-                    this.view.loginForm.clear()
-                })    
-
-            } else webix.message('Неверные данные!')
-            
+        
+        this.view.confirm.attachEvent('onItemClick', () => {
+            loginModel.confirm()
         })
 
+        // logout, нажатие на кнопку выйти
         this.view.logout.attachEvent('onItemClick', () => {
-            this.view.login.show()
-            this.view.project.hide()
-            $$("tasks").hide()
-            $$("oneTask").hide()
-            $$("getBack1").hide()
-            $$("getBack2").hide()
-            this.view.mainLabel.setHTML("Авторизация")
-            this.view.logout.hide()
-            this.view.CRUDToolbar.hide()
-            this.view.setEmployees.hide()
-            this.view.currentUserLabel.setHTML("")
-            this.view.agreementDatatable.disable()
-            
+            loginModel.logout()      
         })
-    }
-
-    verification() {
-
-        let formValues = this.view.loginForm.getValues();
-        // отправление данных на сервер
-
-        // если пользователь найден возвращает с базы ID работника 
-        return formValues.login
     }
 }

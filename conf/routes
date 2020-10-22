@@ -25,10 +25,14 @@ GET     /employees                              CEmployee.getEmployees
 GET     /employees/:id                          CEmployee.getEmployeesByProjectID
 GET     /employee/:id                           CEmployee.getEmployeeByID
 POST    /addemployee                            CEmployee.addEmployee
-POST    /delemployee                            CEmployee.deleteEmployee
+POST    /removeemployee                         CEmployee.removeEmployee
 POST    /newemployee                            CEmployee.newEmployee
+POST    /updateemployee                         CEmployee.updateEmployee
+DELETE  /employee/:id                           CEmployee.deleteEmployee
 
 POST    /newuser                                CUser.newUser
+POST    /verification                           CUser.verification
+GET     /emailcheck/:email                      CUser.emailCheck
 
 
 # Ignore favicon requests

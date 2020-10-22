@@ -33,12 +33,22 @@ func (p *PEmployee) NewEmployee(e *entities.Employee) (id int, err error) {
 	return p.m.NewEmployee(e)
 }
 
+// UpdateEmployee метод создания задачи
+func (p *PEmployee) UpdateEmployee(e *entities.Employee) (err error) {
+	return p.m.UpdateEmployee(e)
+}
+
+// DeleteEmployee метод создания задачи
+func (p *PEmployee) DeleteEmployee(id int) (err error) {
+	return p.m.DeleteEmployee(id)
+}
+
 // AddEmployee метод добавления сотрудника в проект
 func (p *PEmployee) AddEmployee(empID int64, projID int64) (id int, err error) {
 	return p.m.AddEmployee(empID, projID)
 }
 
-// DeleteEmployee метод удаления сотрудника из проекта
-func (p *PEmployee) DeleteEmployee(empID int64, projID int64) (err error) {
-	return p.m.DeleteEmployee(empID, projID)
+// RemoveEmployee метод удаления сотрудника из проекта
+func (p *PEmployee) RemoveEmployee(empID int64, projID int64) (err error) {
+	return p.m.RemoveEmployee(empID, projID)
 }

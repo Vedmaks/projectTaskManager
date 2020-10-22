@@ -22,7 +22,7 @@ var (
 
 // InitDB f
 func InitDB() {
-	connStr := "user=postgres password=12348765 dbname=projectTaskManager sslmode=disable"
+	connStr := "user=postgres password=Asdfmnbu895 dbname=taskManagerDB sslmode=disable"
 	var err error
 	DB, err = sql.Open("postgres", connStr)
 

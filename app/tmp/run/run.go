@@ -10,6 +10,8 @@ import (
 	controllers "github.com/revel/modules/static/app/controllers"
 	_ "github.com/revel/modules/testrunner/app"
 	controllers0 "github.com/revel/modules/testrunner/app/controllers"
+	_ "github.com/revel/revel"
+	_ "github.com/revel/revel/cache"
 	_ "projectTaskManager/app"
 	controllers1 "projectTaskManager/app/controllers"
 	tests "projectTaskManager/tests"
@@ -115,6 +117,20 @@ func Register() {
 			
 		})
 	
+	revel.RegisterController((*controllers1.App)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Index",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+					14: []string{ 
+					},
+				},
+			},
+			
+		})
+	
 	revel.RegisterController((*controllers1.CEmployee)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
@@ -148,7 +164,7 @@ func Register() {
 				},
 			},
 			&revel.MethodType{
-				Name: "AddEmployee",
+				Name: "UpdateEmployee",
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
@@ -156,6 +172,21 @@ func Register() {
 			},
 			&revel.MethodType{
 				Name: "DeleteEmployee",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "id", Type: reflect.TypeOf((*int)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "AddEmployee",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "RemoveEmployee",
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
@@ -266,6 +297,21 @@ func Register() {
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "NewUser",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "EmailCheck",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "email", Type: reflect.TypeOf((*string)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "Verification",
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 

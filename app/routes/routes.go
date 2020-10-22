@@ -98,6 +98,18 @@ func (_ tTestRunner) List(
 }
 
 
+type tApp struct {}
+var App tApp
+
+
+func (_ tApp) Index(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("App.Index", args).URL
+}
+
+
 type tCEmployee struct {}
 var CEmployee tCEmployee
 
@@ -134,6 +146,22 @@ func (_ tCEmployee) NewEmployee(
 	return revel.MainRouter.Reverse("CEmployee.NewEmployee", args).URL
 }
 
+func (_ tCEmployee) UpdateEmployee(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CEmployee.UpdateEmployee", args).URL
+}
+
+func (_ tCEmployee) DeleteEmployee(
+		id int,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "id", id)
+	return revel.MainRouter.Reverse("CEmployee.DeleteEmployee", args).URL
+}
+
 func (_ tCEmployee) AddEmployee(
 		) string {
 	args := make(map[string]string)
@@ -141,11 +169,11 @@ func (_ tCEmployee) AddEmployee(
 	return revel.MainRouter.Reverse("CEmployee.AddEmployee", args).URL
 }
 
-func (_ tCEmployee) DeleteEmployee(
+func (_ tCEmployee) RemoveEmployee(
 		) string {
 	args := make(map[string]string)
 	
-	return revel.MainRouter.Reverse("CEmployee.DeleteEmployee", args).URL
+	return revel.MainRouter.Reverse("CEmployee.RemoveEmployee", args).URL
 }
 
 
@@ -258,6 +286,22 @@ func (_ tCUser) NewUser(
 	args := make(map[string]string)
 	
 	return revel.MainRouter.Reverse("CUser.NewUser", args).URL
+}
+
+func (_ tCUser) EmailCheck(
+		email string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "email", email)
+	return revel.MainRouter.Reverse("CUser.EmailCheck", args).URL
+}
+
+func (_ tCUser) Verification(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("CUser.Verification", args).URL
 }
 
 
