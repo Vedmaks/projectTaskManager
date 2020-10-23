@@ -1,43 +1,41 @@
-# Welcome to Revel
+Спецификация проекта “TaskManager”
 
-A high-productivity web framework for the [Go language](http://www.golang.org/).
+Цель:
+Создание приложения выполняющего функции менеджера задач.
 
+Описание:
+Task Manager (менеджер задач) - это инструмент, который позволяет разработчикам вести учет задач проекта, планировать и отслеживать процесс выполнения.
 
-### Start the web server:
-
-   revel run myapp
-
-### Go to http://localhost:9000/ and you'll see:
-
-    "It works"
-
-## Code Layout
-
-The directory structure of a generated Revel application:
-
-    conf/             Configuration directory
-        app.conf      Main app configuration file
-        routes        Routes definition file
-
-    app/              App sources
-        init.go       Interceptor registration
-        controllers/  App controllers go here
-        views/        Templates directory
-
-    messages/         Message files
-
-    public/           Public static assets
-        css/          CSS files
-        js/           Javascript files
-        images/       Image files
-
-    tests/            Test suites
-
-
-## Help
-
-* The [Getting Started with Revel](http://revel.github.io/tutorial/gettingstarted.html).
-* The [Revel guides](http://revel.github.io/manual/index.html).
-* The [Revel sample apps](http://revel.github.io/examples/index.html).
-* The [API documentation](https://godoc.org/github.com/revel/revel).
-
+Функциональные возможности:
+1. Учет проектов
+   
+   1.1 Создание новых проектов
+   
+   1.2 Редактирование проектов
+   
+   1.3 Удаление проектов
+2. Учет задач для каждого проекта
+	
+	2.1 Создание задач
+	
+	2.2 Редактирование задач
+	
+	2.3 Удаление задач
+3. Учет сотрудников
+	
+	3.1 Добавление сотрудника
+	
+	3.2 Удаление сотрудника
+	
+	3.3 Редактирование данных сотрудника
+	
+	3.4 Назначение сотрудников в проект
+	
+	3.5 Удаление сотрудников из проекта
+	
+	3.6 Назначение сотрудников к задаче
+4. Логика состояний задач
+	
+	4.1 Изменение состояния задачи при выполнении условий
+	
+	4.2 Фильтрация задач по состоянию
