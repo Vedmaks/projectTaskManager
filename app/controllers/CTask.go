@@ -15,11 +15,6 @@ type CTask struct {
 	p task_provider.PTask
 }
 
-// Before интерцептор контроллера CTask
-func (c *CTask) Before() (result revel.Result, rc CTask) {
-	return
-}
-
 // GetTaskByID получение задачи по id
 func (c *CTask) GetTaskByID(id int) revel.Result {
 

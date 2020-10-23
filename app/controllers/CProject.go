@@ -15,11 +15,6 @@ type CProject struct {
 	p project_provider.PProject
 }
 
-// Before интерцептор контроллера CProject
-func (c *CProject) Before() (result revel.Result, rc CProject) {
-	return
-}
-
 // GetProjectByID получение проекта по id
 func (c *CProject) GetProjectByID(id int) revel.Result {
 
